@@ -7,8 +7,11 @@ import { useHover } from "@uidotdev/usehooks";
 import Image from "next/image";
 import Link from "next/link";
 
-import SideNav from "./sidenav/SideNav";
-import CartIcon from "../cart/CartIcon";
+import { BsInstagram } from "react-icons/bs";
+import { AiTwotonePhone } from "react-icons/ai";
+import { MdEmail } from "react-icons/md";
+
+import SideNav from "./sidenav/TheSideNav";
 import TheButton from "../ui/TheButton";
 import axios from "axios";
 
@@ -21,6 +24,10 @@ export default function MainNav() {
   const pathname = usePathname();
   const isAdminPage = pathname === "/admin";
   const isHomePage = pathname === "/";
+
+  const colorValue = isHomePage
+  ? `${isHovered ? "text-black" : "text-white"}`
+  : "text-white";
 
   const signOutHandler = () => {
     signOut();
@@ -57,10 +64,14 @@ export default function MainNav() {
   const notAdminHeader = (
     <>
       <SideNav isHovered={isHovered} isHomePage={isHomePage}/>
-      <Link href={"/"}>
+      <Link href={"/"} className="pl-20">
         <Image src={logo} alt="logo" width={50} height={50} />
       </Link>
-      <CartIcon isHovered={isHovered} isHomePage={isHomePage} />
+      <div className={`flex items-center gap-3 ${colorValue}`}>
+        <BsInstagram size={25} />
+        <AiTwotonePhone size={27} />
+        <MdEmail size={28}/>
+      </div>
     </>
   );
 

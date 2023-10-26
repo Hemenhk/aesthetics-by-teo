@@ -1,6 +1,6 @@
 import { verifyPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
-import AdminAuth from "@/models/adminAuth";
+import ByTeoAdminAuthSchema from "@/models/adminAuth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -18,7 +18,7 @@ const handler = NextAuth({
         }
 
         const { email, password } = credentials as any;
-        const adminUser = await AdminAuth.findOne({
+        const adminUser = await ByTeoAdminAuthSchema.findOne({
           email: email,
         }).select("+password");
 

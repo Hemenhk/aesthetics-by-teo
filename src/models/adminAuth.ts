@@ -5,7 +5,7 @@ export interface AdminAuthDocument extends Document {
   password: string;
 }
 
-const adminAuthSchema = new mongoose.Schema({
+const byTeoAdminAuthSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
@@ -19,9 +19,11 @@ const adminAuthSchema = new mongoose.Schema({
   },
 });
 
-const AdminAuth: Model<AdminAuthDocument> =
-  mongoose.models.AdminAuth ||
-  mongoose.model<AdminAuthDocument>("AdminAuth", adminAuthSchema);
+const ByTeoAdminAuthSchema: Model<AdminAuthDocument> =
+  mongoose.models.ByTeoAdminAuthSchema ||
+  mongoose.model<AdminAuthDocument>(
+    "ByTeoAdminAuthSchema",
+    byTeoAdminAuthSchema
+  );
 
-
-export default AdminAuth;
+export default ByTeoAdminAuthSchema;
