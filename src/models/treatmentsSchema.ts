@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import mongoose, { Document, Model, mongo } from "mongoose";
 
 export interface TreatmentDocument extends Document {
@@ -40,7 +41,7 @@ const treatmentsSchema = new mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, "A product must have an image cover"],
+      default: "https://res.cloudinary.com/hemen/image/upload/v1696246559/default_post_kh6p7i.webp"
     },
     images: [String],
   },

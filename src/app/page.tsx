@@ -29,7 +29,6 @@ export default function Home() {
           <HeroBanner />
         </div>
       </div>
-      <FeaturedCollection handle="hair" />
     </div>
   );
 }
