@@ -11,6 +11,7 @@ export default function AdminNav() {
     { title: "Hero Image", href: "/admin/hero-image" },
     { title: "Footer", href: "/admin/footer" },
     { title: "Reviews", href: "/admin/reviews" },
+    { title: "Skapa behandling", href: "/admin/skapa-behandling" },
   ];
 
   return (

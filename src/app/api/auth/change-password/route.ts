@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { connectToDatabase } from "@/lib/db";
-import AdminAuth from "@/models/adminAuth";
+import ByTeoAdminAuthSchema from "@/models/adminAuth";
 import { hashPassword, verifyPassword } from "@/lib/auth";
 
 export async function PATCH(req: NextRequest) {
@@ -38,7 +38,7 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
-    const adminUser = await AdminAuth.findOne({ email: adminEmail }).select(
+    const adminUser = await ByTeoAdminAuthSchema.findOne({ email: adminEmail }).select(
       "+password"
     );
 
@@ -70,7 +70,7 @@ export async function PATCH(req: NextRequest) {
 
     const hashedNewPassword = await hashPassword(newPassword);
 
-    await AdminAuth.updateOne(
+    await ByTeoAdminAuthSchema.updateOne(
       { email: adminEmail },
       { $set: { password: hashedNewPassword } }
     );

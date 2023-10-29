@@ -5,12 +5,11 @@ import React, { useEffect, useState } from "react";
 import { useShopifyContext } from "@/app/context/store";
 
 import ProductPrice from "@/components/single-product/price/ProductPrice";
-import ProductImage from "@/components/single-product/images/ProductImage";
+import ProductImage from "@/components/treatments/images/ProductImage";
 import ProductVariants from "@/components/single-product/variants/ProductVariants";
 import QuantitySelector from "@/components/single-product/quantity-selector/QuantitySelector";
 import TheAccordion from "@/components/single-product/accordion/Accordion";
 import TheButton from "@/components/ui/TheButton";
-import ReviewForm from "./review/ReviewForm";
 import AverageRating from "./review/AverageRating";
 
 type Props = {

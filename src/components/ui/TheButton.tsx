@@ -5,24 +5,27 @@ import classes from "./styles/TheButton.module.css";
 type ButtonProps = {
   label: string;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
-  height?: string;
   width?: string;
+  variant?: "primary" | "secondary";
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
 };
 export default function TheButton({
   label,
   onClick,
-  height,
   type,
+  variant,
   width,
   disabled,
 }: ButtonProps) {
+  const primaryButton = classes.btn_primary;
+  const secondayButton = classes.btn_secondary;
+
   return (
     <button
-      className={`${classes.btn} ${width}  ${
-        disabled ? "opacity-20" : "opacity-100"
-      }`}
+      className={`${
+        variant === "primary" ? primaryButton : secondayButton
+      } ${width}  ${disabled ? "opacity-20" : "opacity-100"}`}
       disabled={disabled}
       type={type}
       onClick={onClick}

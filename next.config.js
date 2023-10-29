@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["cdn.shopify.com", "res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "placehold.co"],
     formats: ["image/webp"],
   },
   experimental: {
