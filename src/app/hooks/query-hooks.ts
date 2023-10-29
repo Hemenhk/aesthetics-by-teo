@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Product,
   addTreatment,
   deleteTreatment,
   fetchAllTreatments,
@@ -22,12 +23,9 @@ const useTreatmentById = (id: string) => {
   });
 };
 
-const useCreateTreatment = (data) => {
-  // const queryClient = useQueryClient();
+const useCreateTreatment = (data: Product) => {
   return useMutation({
-    // mutationKey: ["treatments", data],
     mutationFn: () => addTreatment(data),
-    // onSuccess: queryClient.invalidateQueries,
   });
 };
 
