@@ -1,6 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
 import { fetchProductWithHandle } from "@/shopify/shopify-req";
-import SingleProduct from "@/components/single-product/SingleProduct";
 
 type Props = {
   params: { productHandle: string };
@@ -26,7 +25,6 @@ export async function generateMetadata(
 export default function ProductPage({ params }: Props) {
   return (
     <>
-      <SingleProduct params={params}/>
     </>
   );
 }
