@@ -1,6 +1,6 @@
 import { hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
-import AdminAuth, { AdminAuthDocument } from "@/models/adminAuth";
+import ByTeoAdminAuthSchema, { AdminAuthDocument } from "@/models/adminAuth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const { email, password } = data;
 
     const hashedPassword: string = await hashPassword(password);
-    const admin = await AdminAuth.create({ email, password: hashedPassword });
+    const admin = await ByTeoAdminAuthSchema.create({ email, password: hashedPassword });
 
     console.log("Admin Created:", admin);
     return NextResponse.json({

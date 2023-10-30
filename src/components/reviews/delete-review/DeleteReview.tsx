@@ -10,7 +10,6 @@ import {
 
 import { SlOptionsVertical } from "react-icons/sl";
 import { BsTrash } from "react-icons/bs";
-import { Button } from "@chakra-ui/react";
 import axios from "axios";
 
 export default function DeleteReview({ id }: { id: string }) {
@@ -29,9 +28,9 @@ export default function DeleteReview({ id }: { id: string }) {
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="hover:bg-transparent">
+          {/* <Button variant="ghost" className="hover:bg-transparent">
             <SlOptionsVertical />
-          </Button>
+          </Button> */}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>
