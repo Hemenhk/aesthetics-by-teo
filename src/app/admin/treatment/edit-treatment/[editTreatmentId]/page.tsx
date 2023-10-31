@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useRouter } from "next/navigation";
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
 const formSchema = z.object({
   title: z.string(),
@@ -36,6 +38,12 @@ export default function EditTreatmentPage({
 }) {
   const id = params.editTreatmentId;
   const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const goBackHandler = () => {
+    router.push("/admin");
+  };
+
 
   const { data: treatmentData, isLoading } = useTreatmentById(id);
   console.log("this is the treatment data", treatmentData);
@@ -87,10 +95,23 @@ export default function EditTreatmentPage({
   };
 
   return (
+    <div className="flex flex-col justify-center gap-8 pt-6">
+      <div className="flex flex-row justify-between border-b px-5 pb-4">
+        <div className="pl-4 text-gray-800 transition ease-out duration-300 hover:text-gray-600">
+          <BsFillArrowLeftCircleFill
+            size={30}
+            cursor={"pointer"}
+            onClick={goBackHandler}
+          />
+        </div>
+        <h1 className="tracking-wide uppercase text-base lg:text-xl">
+          Ändra behandling
+        </h1>
+      </div>
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col items-center w-[100%] space-y-8"
+        className="space-y-6 w-full lg:w-[80%] px-5"
       >
         <FormField
           control={form.control}
@@ -163,5 +184,6 @@ export default function EditTreatmentPage({
         )}
       </form>
     </Form>
+    </div>
   );
 }

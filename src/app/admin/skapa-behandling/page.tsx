@@ -60,7 +60,10 @@ export default function AddTreatment() {
     isSuccess,
   } = useMutation({
     mutationFn: async (data: Product) => addTreatment(data),
-    onSuccess: (data) => queryClient.setQueryData(["treatments"], data),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["treatments"], data);
+      queryClient.invalidateQueries({queryKey: ["treatments"]})
+    },
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
