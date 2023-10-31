@@ -27,7 +27,6 @@ export default function DeleteReview({ id }: { id: string }) {
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild></DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>
             <div onClick={handleDelete}>
