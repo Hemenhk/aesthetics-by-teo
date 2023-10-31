@@ -12,6 +12,7 @@ export default function AdminNav() {
     { title: "Footer", href: "/admin/footer" },
     { title: "Reviews", href: "/admin/reviews" },
     { title: "Skapa behandling", href: "/admin/skapa-behandling" },
+    { title: "Hantera behandlingar", href: "/admin/treatment/all-treatments" },
   ];
 
   return (
