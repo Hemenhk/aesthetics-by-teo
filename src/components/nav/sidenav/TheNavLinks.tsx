@@ -46,6 +46,9 @@ export default function TheNavLinks() {
       <li className=" border-b pb-4">
         <Link href={"/faq"}>FAQ</Link>
       </li>
+      <li className=" border-b pb-4">
+        <Link href={"/admin"}>ADMIN</Link>
+      </li>
     </ul>
   );
 }

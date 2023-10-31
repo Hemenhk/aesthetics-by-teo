@@ -14,9 +14,9 @@ import axios from "axios";
 
 export default function DeleteReview({ id }: { id: string }) {
   const handleDelete = async () => {
-    console.log('ID to be deleted:', id)
+    console.log("ID to be deleted:", id);
     try {
-      const res = await axios.delete("/api/reviews", {data: {id}});
+      const res = await axios.delete("/api/reviews", { data: { id } });
       console.log("did work", res);
       alert("Review deleted successfully");
     } catch (error) {
@@ -27,11 +27,6 @@ export default function DeleteReview({ id }: { id: string }) {
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          {/* <Button variant="ghost" className="hover:bg-transparent">
-            <SlOptionsVertical />
-          </Button> */}
-        </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>
             <div onClick={handleDelete}>

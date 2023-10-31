@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import mongoose, { Document, Model, mongo } from "mongoose";
 
 export interface TreatmentDocument extends Document {
@@ -19,6 +18,7 @@ const treatmentsSchema = new mongoose.Schema(
       trim: true,
       maxLength: [250, "A product must have less or equal to 250 chars"],
       minLength: [1, "A product must have more or equal to 10 chars"],
+      unique: true
     },
     description: {
       type: String,

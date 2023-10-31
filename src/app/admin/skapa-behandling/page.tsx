@@ -37,7 +37,7 @@ const formSchema = z.object({
 
 export default function AddTreatment() {
   const queryClient = useQueryClient();
-  const router = useRouter()
+  const router = useRouter();
 
   const goBackHandler = () => {
     router.push("/admin");
@@ -48,8 +48,7 @@ export default function AddTreatment() {
     defaultValues: {
       title: "",
       description: "",
-      imageCover:
-        "https://res.cloudinary.com/hemen/image/upload/v1696246559/default_post_kh6p7i.webp",
+      imageCover: "",
       price: "",
     },
   });
@@ -63,7 +62,6 @@ export default function AddTreatment() {
     mutationFn: async (data: Product) => addTreatment(data),
     onSuccess: (data) => queryClient.setQueryData(["treatments"], data),
   });
-  
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     const { description, title, imageCover } = values;
@@ -74,12 +72,14 @@ export default function AddTreatment() {
         title,
         description,
         price,
-        imageCover,
+        imageCover:
+          values.imageCover ||
+          "https://res.cloudinary.com/hemen/image/upload/v1696246559/default_post_kh6p7i.webp",
       });
-      
-      const id = response.data.treatments._id
+
+      const id = response.data.treatments._id;
       setTimeout(() => {
-        router.push(`/treatments/${id}`)
+        router.push(`/treatments/${id}`);
       }, 2000);
       console.log("skapade behandling", response);
     } catch (error) {
@@ -138,12 +138,7 @@ export default function AddTreatment() {
               <FormItem>
                 <FormLabel>Pris</FormLabel>
                 <FormControl>
-                  <Input
-                    required
-                    type="number"
-                    placeholder="pris"
-                    {...field}
-                  />
+                  <Input required type="number" placeholder="pris" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
