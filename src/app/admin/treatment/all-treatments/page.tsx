@@ -32,7 +32,7 @@ export default function AllTreatments() {
       <Card className="flex flex-col gap-5">
         <CardHeader>{treatment?.title}</CardHeader>
         <CardFooter className="flex justify-between items-center gap-3">
-          <Link href={`/treatment/${treatment?._id}`}>Edit</Link>
+          <Link href={`/admin/treatment/edit-treatment/${treatment?._id}`}>Edit</Link>
           <Button
             onClick={async () => {
               await deleteTreatment(treatment._id);
