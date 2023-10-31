@@ -23,16 +23,15 @@ export default function Home() {
   //   height: "95vh",
   // };
 
-  const prefetchTreatments = async () => {
-    await queryClient.prefetchQuery({
-      queryKey: ["treatments"],
-      queryFn: fetchAllTreatments,
-    });
-  };
-
   useLayoutEffect(() => {
+    const prefetchTreatments = async () => {
+      await queryClient.prefetchQuery({
+        queryKey: ["treatments"],
+        queryFn: fetchAllTreatments,
+      });
+    };
     prefetchTreatments();
-  }, []);
+  }, [queryClient]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 pb-10">

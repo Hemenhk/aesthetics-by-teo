@@ -22,6 +22,12 @@ import { Input } from "@/components/ui/input";
 
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import { Oval } from "react-loader-spinner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  HeroBanner,
+  fetchHeroBanner,
+  updateHeroBanner,
+} from "@/axios-instances/axios-instances";
 
 const formSchema = z.object({
   heroHeading: z.string(),
@@ -31,67 +37,52 @@ const formSchema = z.object({
 });
 
 export default function HeroPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [heroValues, setHeroValues] = useState({
-    heroHeading: "",
-    heroSubHeading: "",
-    heroButtonText: "",
-    heroButtonColor: "",
-  });
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const data = await axios.get("/api/auth/admin-dashboard/hero-banner");
-        setHeroValues({
-          heroHeading: data.data.heroValues[0].heroHeading,
-          heroSubHeading: data.data.heroValues[0].heroSubHeading,
-          heroButtonText: data.data.heroValues[0].heroButtonText,
-          heroButtonColor: data.data.heroValues[0].heroButtonColor,
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data: heroBannerData } = useQuery({
+    queryKey: ["hero-banner"],
+    queryFn: fetchHeroBanner,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      heroHeading: "",
-      heroSubHeading: "",
-      heroButtonText: "",
-      heroButtonColor: "",
-    },
     values: {
-      heroHeading: heroValues.heroHeading,
-      heroSubHeading: heroValues.heroSubHeading,
-      heroButtonText: heroValues.heroButtonText,
-      heroButtonColor: heroValues.heroButtonColor,
+      heroHeading: heroBannerData?.heroHeading,
+      heroSubHeading: heroBannerData?.heroSubHeading,
+      heroButtonText: heroBannerData?.heroButtonText,
+      heroButtonColor: heroBannerData?.heroButtonColor,
     },
   });
 
-  const goBackHandler = () => {
-    router.push("/admin");
-  };
+  const { mutateAsync: updateHeroMutation, isPending } = useMutation({
+    mutationFn: async (data: HeroBanner) => {
+      updateHeroBanner(data);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["hero-banner"], data);
+      queryClient.refetchQueries({ queryKey: ["hero-banner"] });
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true)
-      const res = await axios.patch(
-        " /api/auth/admin-dashboard/hero-banner",
-        values
-      );
-      setIsLoading(false)
-      router.refresh()
-      console.log(res);
+      const { heroButtonColor, heroButtonText, heroHeading, heroSubHeading } =
+        values;
+
+      await updateHeroMutation({
+        heroButtonColor,
+        heroButtonText,
+        heroHeading,
+        heroSubHeading,
+      });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goBackHandler = () => {
+    router.push("/admin");
   };
 
   return (
@@ -186,7 +177,7 @@ export default function HeroPage() {
             className="w-full rounded-sm px-16 uppercase tracking-widest"
             type="submit"
           >
-            {isLoading ? (
+            {isPending ? (
               <div className="flex flex-row items-center justify-center gap-2">
                 <Oval
                   height={20}

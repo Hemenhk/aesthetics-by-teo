@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -21,51 +20,62 @@ import { Input } from "@/components/ui/input";
 
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import { Oval } from "react-loader-spinner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Footer,
+  fetchFooter,
+  updateFooter,
+} from "@/axios-instances/axios-instances";
 
 const formSchema = z.object({
   footerBackgroundColor: z.string(),
 });
 
 export default function FooterPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [footerBackgroundColor, setfooterBackgroundColor] = useState("");
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/auth/admin-dashboard/footer");
-        setfooterBackgroundColor(res.data.footerValue[0].footerBackgroundColor);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    data: footerData,
+    isError,
+    isFetching,
+  } = useQuery({
+    queryKey: ["footer"],
+    queryFn: fetchFooter,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      footerBackgroundColor: "",
-    },
     values: {
-      footerBackgroundColor: footerBackgroundColor,
+      footerBackgroundColor: footerData?.footerBackgroundColor,
     },
   });
 
-  const goBackHandler = () => {
-    router.push("/admin");
-  };
+  const {
+    mutateAsync: updateFooterMutation,
+    isError: mutationError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (data: Footer) => {
+      updateFooter(data);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["footer"], data);
+      queryClient.refetchQueries({ queryKey: ["footer"] });
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true);
-      const res = await axios.patch("/api/auth/admin-dashboard/footer", values);
-      setIsLoading(false);
-      console.log(res);
+      const { footerBackgroundColor } = values;
+      await updateFooterMutation({ footerBackgroundColor });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goBackHandler = () => {
+    router.push("/admin");
   };
 
   return (
@@ -111,7 +121,7 @@ export default function FooterPage() {
             className="w-full rounded-sm px-16 uppercase tracking-widest"
             type="submit"
           >
-            {isLoading ? (
+            {mutationError ? (
               <div className="flex flex-row items-center justify-center gap-2">
                 <Oval
                   height={20}

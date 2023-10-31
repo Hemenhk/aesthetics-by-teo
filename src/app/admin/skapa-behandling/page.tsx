@@ -63,6 +63,7 @@ export default function AddTreatment() {
     onSuccess: (data) => {
       queryClient.setQueryData(["treatments"], data);
       queryClient.invalidateQueries({queryKey: ["treatments"]})
+      queryClient.refetchQueries({queryKey: ["treatments"]})
     },
   });
 

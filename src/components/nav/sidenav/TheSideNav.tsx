@@ -20,7 +20,7 @@ type SideNavProps = {
 export default function TheSideNav({ isHomePage, isHovered }: SideNavProps) {
   const btnColorValue = isHomePage
     ? `${isHovered ? "text-black" : "text-white"}`
-    : "text-white";
+    : !isHomePage && "text-black";
 
   return (
     <Sheet>

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -21,6 +20,12 @@ import { Input } from "@/components/ui/input";
 
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import { Oval } from "react-loader-spinner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Announcement,
+  fetchAnnouncement,
+  updateAnnouncement,
+} from "@/axios-instances/axios-instances";
 
 const formSchema = z.object({
   announcementText: z.string(),
@@ -28,55 +33,57 @@ const formSchema = z.object({
 });
 
 export default function AnnouncementPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [announcementColor, setAnnouncementColor] = useState("");
-  const [announcementText, setAnnouncementText] = useState("");
+  const queryClient = useQueryClient();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/auth/admin-dashboard/announcement");
-        setAnnouncementColor(res.data.announcementValue[0].announcementColor);
-        setAnnouncementText(res.data.announcementValue[0].announcementText);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    data: announcementData,
+    isError,
+    isFetching,
+  } = useQuery({
+    queryKey: ["announement"],
+    queryFn: fetchAnnouncement,
+  });
+  console.log("ann", announcementData);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      announcementColor: "",
-      announcementText: "",
-    },
     values: {
-      announcementColor: announcementColor,
-      announcementText: announcementText,
+      announcementColor: announcementData?.announcementColor,
+      announcementText: announcementData?.announcementText,
     },
   });
 
-  const goBackHandler = () => {
-    router.push("/admin");
-  };
+  const {
+    mutateAsync: updateAnnouncementMutation,
+    isError: mutationError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (data: Announcement) => {
+      updateAnnouncement(data);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["announcement"], data);
+      queryClient.refetchQueries({ queryKey: ["announcement"] });
+    },
+  });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setIsLoading(true);
-      const res = await axios.patch(
-        " /api/auth/admin-dashboard/announcement",
-        values
-      );
-      setIsLoading(false);
+      const { announcementColor, announcementText } = values;
+      await updateAnnouncementMutation({
+        announcementColor,
+        announcementText,
+      });
       router.refresh();
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
-
+  
+  const goBackHandler = () => {
+    router.push("/admin");
+  };
   return (
     <div className="flex flex-col justify-center gap-8 pt-6">
       <div className="flex flex-row justify-between border-b px-5 pb-4">
@@ -138,7 +145,7 @@ export default function AnnouncementPage() {
             className="w-full rounded-sm px-16 uppercase tracking-widest"
             type="submit"
           >
-            {isLoading ? (
+            {mutationError ? (
               <div className="flex flex-row items-center justify-center gap-2">
                 <Oval
                   height={20}

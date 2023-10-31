@@ -1,39 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
 import TheFooterMenu from "./footer-menu/TheFooterMenu";
 
 import classes from "./styles/TheFooter.module.css";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFooter } from "@/axios-instances/axios-instances";
 
 export default function TheFooter() {
-  const [footerBackgroundColor, setFooterBackgroundColor] = useState("");
-
-  useEffect(() => {
-    const fetchAnnouncement = async () => {
-      try {
-        const cachedFooterValues = localStorage.getItem("footerValues");
-        if (cachedFooterValues) {
-          setFooterBackgroundColor(JSON.parse(cachedFooterValues));
-        }
-        const res = await axios.get("/api/auth/admin-dashboard/footer");
-        const data = res.data.footerValue[0];
-        localStorage.setItem("footerValues", JSON.stringify(data));
-        // console.log(data);
-        setFooterBackgroundColor(data.footerBackgroundColor);
-        // console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAnnouncement();
-  }, []);
+  const { data: footerData } = useQuery({
+    queryKey: ["footer"],
+    queryFn: fetchFooter,
+  });
 
   return (
     <div
       className={`flex flex-col gap-8 h-80 text-gray-200  ${classes.container}`}
-      style={{ background: footerBackgroundColor }}
+      style={{ background: footerData?.footerBackgroundColor }}
     >
       <div className="flex flex-row pl-5 pt-14 gap-8 h-3/4">
         <div>
